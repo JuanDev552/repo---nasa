@@ -4,21 +4,21 @@
 const getDateString = data => 
     `${data.getFullYear()}-${(data.getMonth() + 1)}-${data.getDate()}`;
 
-const displayPicture = date => {
+const displayPicture = data => {
     let html = "";
-    if(date.error) {        //mostrar si hay error
-        html += `<span class="error">${date.error.message}</span>`;
+    if(data.error) {        //mostrar si hay error
+        html += `<span class="error">${data.error.message}</span>`;
     }
-    else if (date.code) {   //si hay problemas mostrar el mensaje
-        html += `<span class="error">${date.msg}</span>`;
+    else if (data.code) {   //si hay problemas mostrar el mensaje
+        html += `<span class="error">${data.msg}</span>`;
     }
     else {                  //éxito mostrar datos de imagen/vídeo
-        html += `<h3>${date.title}</h3>`;
+        html += `<h3>${data.title}</h3>`;
         const width = 700;
-        switch (date.media_type) {
+        switch (data.media_type) {
             case "image":
-                html += `<img src="${date.url}" width="${width}">
-                alt="NASA foto"`;
+                html += `<img src="${data.url}" width="${width}"
+                alt="NASA foto">`;
                 break;
             case "video":
                 html += `<iframe src=${data.url}
@@ -32,8 +32,8 @@ const displayPicture = date => {
 
         //fecha y derechos de autor
         html += `<div>${data.date}`;
-        if (data.copyrigth) {
-            html += `<span class="right">&copy; ${data.copyrigth}</span>`;
+        if (data.copyright) {
+            html += `<span class="right">&copy; ${data.copyright}</span>`;
         }
         html += `</div>`;
 
@@ -77,9 +77,9 @@ $(document).ready(() => {
             dateStr = getDateString(dateObj);
 
             //URL de la API de la NASA
-            const dominan = `https://api.nasa.gov/planetary/apod`;
-            const resquest = `?api_key=DEMO_KEY&date=${dateStr}`;
-            const url = dominan + resquest;
+            const domain = `https://api.nasa.gov/planetary/apod`;
+            const request = `?api_key=DEMO_KEY&date=${dateStr}`;
+            const url = domain + request;
 
             fetch(url)
                 .then(response => response.json())
