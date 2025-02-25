@@ -1,13 +1,28 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const nasaRoutes = require('./routes/nasaRoutes');
+const cors = require('cors');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-const port = 3000;
-
-app.get('/', (req, res) => {
-    res.send('Hello Worl test!');
+mongoose.connect('mongodb://localhost:27017/nasa', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('Conectado a la base de datos');
+}).catch((err) => {
+    console.log('Error al conectarse a la base de datos', err);
 });
 
-app.listen(port, () => {
-    console.log(`La aplicacion esta en linea! http://localhost:${port}`);
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use('/nasa', nasaRoutes);
+
+// Iniciar el servidor 
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
