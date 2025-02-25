@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Conexion a MongoDB
 mongoose.connect('mongodb://localhost:27017/nasa', {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -16,11 +17,11 @@ mongoose.connect('mongodb://localhost:27017/nasa', {
 });
 
 // Middleware
-app.use(cors());
+app.use(cors()); // Permite solicitudes desde el frontend
 app.use(express.json());
 
-// Routes
-app.use('/nasa', nasaRoutes);
+// Rutas
+app.use('/api/nasa', nasaRoutes);
 
 // Iniciar el servidor 
 app.listen(PORT, () => {

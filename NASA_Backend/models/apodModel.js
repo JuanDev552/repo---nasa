@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Esquemas para los datos de la API de la NASA
 const apodSchema = new mongoose.Schema({
     title: {
         type: String,

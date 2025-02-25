@@ -3,10 +3,11 @@ const Apod = require('../models/ApodModel');
 
 const getApod = async (req, res) => {
 
-    const { date } = req.query;
+    const { date } = req.query; // Extrae la fecha del query (por ejemplo: ?date=2023-10-01)
     try {
+        // Hace la solicitud a la API de la NASA
         const response = await axios.get(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${date}`);
-        res.json(response.data);
+        res.json(response.data); // Devuelve los datos al frontend
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener el APOD' });
     }

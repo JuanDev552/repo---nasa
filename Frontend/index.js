@@ -76,10 +76,8 @@ $(document).ready(() => {
             //Me aseguro de que la cadena de fecha tenga el formato adecuado
             dateStr = getDateString(dateObj);
 
-            //URL de la API de la NASA
-            const domain = `https://api.nasa.gov/planetary/apod`;
-            const request = `?api_key=DEMO_KEY&date=${dateStr}`;
-            const url = domain + request;
+            // Hacer la solicitud al backend
+        const url = `http://localhost:3000/api/nasa/apod?date=${dateStr}`;
 
             fetch(url)
                 .then(response => response.json())
