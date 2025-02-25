@@ -13,12 +13,13 @@ const getApod = async (req, res) => {
 };
 
 const saveApod = async (req, res) => {
-    const { date, title, explanation, url } = req.body;
+    const { title, explanation, date, url, media_type, copyright  } = req.body;
     try {
-        const newApod = new APOD ({ date, title, explanation, url });
+        const newApod = new APOD ({ title, explanation, date, url, media_type, copyrigth });
         await newApod.save();
+        res.status(201).json(newApod);
     } catch (error) {
-        res.status(500).json({ message: 'Error al guardar el APOD en la base de datos' });
+        res.status(400).json({ message: 'Error al guardar el APOD en la base de datos' });
     }
 };
 
