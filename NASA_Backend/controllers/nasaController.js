@@ -14,7 +14,6 @@ const getApod = async (req, res) => {
 
 const saveApod = async (req, res) => {
     const { date, title, explanation, url } = req.body;
-    const newApod = new Apod({ date, title, explanation, url });
     try {
         const newApod = new APOD ({ date, title, explanation, url });
         await newApod.save();
