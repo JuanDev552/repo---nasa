@@ -2,7 +2,7 @@
 
 //devuelve una cadena de fecha en formato AAAA-MM-DD
 const getDateString = data => 
-    `${data.getFullYear()}-${(data.getMonth() + 1)}-${data.getDate()}`;
+    `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
 
 const displayPicture = data => {
     let html = "";
@@ -26,8 +26,7 @@ const displayPicture = data => {
                 allowfullscreen></iframe>`;
                 break;
             default:
-                html += `<img src="images/notavailable.jpg" 
-                width="${width}" alt="NASA foto">`;
+                html += `<img src="https://via.placeholder.com/700x400?text=Imagen+no+disponible" width="${width}" alt="NASA foto">`;
         }
 
         //fecha y derechos de autor
@@ -68,7 +67,7 @@ $(document).ready(() => {
         const dateObj = new Date(dateStr);
 
         //comprobar si la fecha es válida
-        if (dateObj == "Dato invalido") {
+        if (isNaN(dateObj.getTime())) {
             const msg = "Por favor, introduzca una fecha válida.";
             $("#display").html(`<span class="error">${msg}</span>`);
         }
