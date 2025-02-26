@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const nasaRoutes = require('./routes/nasaRoutes');
+const nasaRoutes = require('./NASA_Backend/routes/nasaRoutes');
 const cors = require('cors');
 
 const app = express();

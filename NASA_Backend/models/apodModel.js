@@ -29,4 +29,4 @@ const apodSchema = new mongoose.Schema({
 
 });
 
-const Apod = mongoose.model('Apod', apodSchema);
+module.exports = mongoose.model('Apod', apodSchema);
