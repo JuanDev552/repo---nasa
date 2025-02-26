@@ -1,12 +1,11 @@
 const axios = require('axios');
-const Apod = require('../models/ApodModel'); // Importa el modelo de la base de datos
+const APOD = require('../models/apodModel.js'); // Importa el modelo de la base de datos
 const mongoose = require('mongoose');
 
 // Conectar a MongoDB
-mongoose.connect('mongodb://localhost:27017/nasa', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect('mongodb://localhost:27017/nasa')
+    .then(() => console.log('Conectado a MongoDB'))
+    .catch(err => console.error('Error al conectar a MongoDB:', err));
 
 // Funcion para descargar los datos historicos de la API de la NASA
 const downloadHistoricalData = async (startDate, endDate) => {
@@ -20,10 +19,10 @@ const downloadHistoricalData = async (startDate, endDate) => {
 
         // Recorre los datos y los guarda en la base de datos
         for (let apod of apods) {
-            const existingApod = await Apod.findOne({ date: apod.date });
-            if (!existingApod) {
-                const newApod = new apod(apod);
-                await newApod.save();
+            const existingAPOD = await APOD.findOne({ date: apod.date });
+            if (!existingAPOD) {
+                const newAPOD = new APOD(apod); // Crear una nueva instancia del modelo APOD
+                await newAPOD.save();
                 console.log(`Guardado: ${apod.date}`);
             } else {
                 console.log(`Ya existe: ${apod.date}`);
@@ -31,8 +30,7 @@ const downloadHistoricalData = async (startDate, endDate) => {
         }
 
         console.log('Descarga completada.');
-    }
-    catch (error) {
+    } catch (error) {
         console.log('Error al descargar los datos historicos:', error.message);
     } finally {
         // Cerrar la conexion a la base de datos
