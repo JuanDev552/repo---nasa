@@ -1,18 +1,18 @@
 "use strict";
 
-//devuelve una cadena de fecha en formato AAAA-MM-DD
+// Devuelve una cadena de fecha en formato AAAA-MM-DD
 const getDateString = data => 
     `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, '0')}-${String(data.getDate()).padStart(2, '0')}`;
 
 const displayPicture = data => {
     let html = "";
-    if(data.error) {        //mostrar si hay error
+    if(data.error) {        // Mostrar si hay error
         html += `<span class="error">${data.error.message}</span>`;
     }
-    else if (data.code) {   //si hay problemas mostrar el mensaje
+    else if (data.code) {   // Si hay problemas mostrar el mensaje
         html += `<span class="error">${data.msg}</span>`;
     }
-    else {                  //éxito mostrar datos de imagen/vídeo
+    else {                  // Éxito mostrar datos de imagen/vídeo
         html += `<h3>${data.title}</h3>`;
         const width = 700;
         switch (data.media_type) {
@@ -29,18 +29,18 @@ const displayPicture = data => {
                 html += `<img src="https://via.placeholder.com/700x400?text=Imagen+no+disponible" width="${width}" alt="NASA foto">`;
         }
 
-        //fecha y derechos de autor
+        // Fecha y derechos de autor
         html += `<div>${data.date}`;
         if (data.copyright) {
             html += `<span class="right">&copy; ${data.copyright}</span>`;
         }
         html += `</div>`;
 
-        //descripción
+        // Descripción
         html += `<p>${data.explanation}</p>`;
     }
 
-    //mostrar en la página
+    // Mostrar en la página
     $("#display").html(html);
 };
 
@@ -51,32 +51,32 @@ const displayError = error => {
 
 $(document).ready(() => {
 
-    //al cargar obtener la fecha de hoy 
+    // Al cargar obtener la fecha de hoy 
     const today = new Date();
     let dateStr = getDateString(today);
 
-    //mostrar la fecha en el campo de entrada
+    // Mostrar la fecha en el campo de entrada
     const dateTextbox = $("#date");
     dateTextbox.val(dateStr);
     dateTextbox.focus();
 
     $("#view_button").click(() => {
 
-        //obtener fecha del cuadro de texto
+        // Obtener fecha del cuadro de texto
         dateStr = $("#date").val();
         const dateObj = new Date(dateStr);
 
-        //comprobar si la fecha es válida
+        // Comprobar si la fecha es válida
         if (isNaN(dateObj.getTime())) {
             const msg = "Por favor, introduzca una fecha válida.";
             $("#display").html(`<span class="error">${msg}</span>`);
         }
         else {
-            //Me aseguro de que la cadena de fecha tenga el formato adecuado
+            // Me aseguro de que la cadena de fecha tenga el formato adecuado
             dateStr = getDateString(dateObj);
 
             // Hacer la solicitud al backend
-        const url = `http://localhost:3000/api/nasa/apod?date=${dateStr}`;
+            const url = `http://localhost:3000/api/nasa/apod?date=${dateStr}`;
 
             fetch(url)
                 .then(response => response.json())

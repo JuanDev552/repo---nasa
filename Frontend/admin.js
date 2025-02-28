@@ -29,7 +29,7 @@ $(document).on('click', '.delete-btn', function () {
     const apodId = $(this).data('id');
 
     if (confirm('¿Estás seguro de que quieres eliminar este APOD?')) {
-        fetch(`http://localhost:3000/api/nasa/apod?id=${apodId}`, {
+        fetch(`http://localhost:3000/api/nasa/apod?date=${dateStr}`, {
             method: 'DELETE'
         })
         .then(response => response.json())

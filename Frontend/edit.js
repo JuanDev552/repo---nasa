@@ -1,19 +1,27 @@
 $(document).ready(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const apodId = urlParams.get('id');
+    const dateStr = urlParams.get('id');
 
     // Obtener los datos del APOD
-    fetch(`http://localhost:3000/api/nasa/apod?id=${apodId}`)
-        .then(response => response.json())
-        .then(apod => {
-            $('#title').val(apod.title);
-            $('#explanation').val(apod.explanation);
-            $('#date').val(apod.date);
-            $('#url').val(apod.url);
-            $('#media_type').val(apod.media_type);
-            $('#copyright').val(apod.copyright || '');
-        })
-        .catch(error => console.error('Error al obtener el APOD:', error));
+    fetch(`http://localhost:3000/api/nasa/apod?date=${dateStr}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+    })
+    .then(apod => {
+        $('#title').val(apod.title);
+        $('#explanation').val(apod.explanation);
+        $('#date').val(apod.date);
+        $('#url').val(apod.url);
+        $('#media_type').val(apod.media_type);
+        $('#copyright').val(apod.copyright || '');
+    })
+    .catch(error => {
+        console.error('Error al obtener el APOD:', error);
+        alert('No se pudo obtener el APOD. Por favor, inténtalo de nuevo.');
+    });
 
     // Manejar el envío del formulario de edición
     $('#edit-apod-form').submit(async function (e) {
@@ -44,7 +52,7 @@ $(document).ready(() => {
                 copyright: $('#copyright').val()
             };
 
-            fetch(`http://localhost:3000/api/nasa/apod?id=${apodId}`, {
+            fetch(`http://localhost:3000/api/nasa/apod?date=${dateStr}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -68,7 +76,7 @@ $(document).ready(() => {
                 copyright: $('#copyright').val()
             };
 
-            fetch(`http://localhost:3000/api/nasa/apod?id=${apodId}`, {
+            fetch(`http://localhost:3000/api/nasa/apod?date=${dateStr}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

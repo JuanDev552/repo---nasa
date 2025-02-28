@@ -2,7 +2,7 @@
 const APOD = require('../models/apodModel.js'); // Importa el modelo de la base de datos
 
 const getAPOD = async (req, res) => {
-    const {id} = req.query;
+    const {date} = req.query;
     try {
         
         // Verifica si ya tienes los datos en MongoDB
@@ -32,8 +32,9 @@ const getAPOD = async (req, res) => {
 };
 
 const getAllAPODs = async (req, res) => {
+    const { date } = req.query;
     try {
-        const apods = await APOD.find();
+        const apods = await APOD.find(date);
         res.json(apods);
     } catch (error) {
         res.status(500).json({ message: 'Error al obtener los APODs' });
@@ -61,7 +62,7 @@ const saveAPOD = async (req, res) => {
 */
 
 const updateAPOD = async (req, res) => {
-    const { id } = req.query;
+    const { date } = req.query;
     const { title, explanation, url, media_type, copyright } = req.body;
     try {
         // Verifica si el APOD existe
@@ -86,7 +87,7 @@ const updateAPOD = async (req, res) => {
 };
 
 const deleteAPOD = async (req, res) => {
-    const { id } = req.query;
+    const { date } = req.query;
     try {
         // Verifica si el APOD existe
         const existingAPOD = await APOD.findOne({ date });
