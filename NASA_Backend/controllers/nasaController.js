@@ -55,27 +55,57 @@ const getAllAPODs = async (req, res) => {
 const saveAPOD = async (req, res) => {
     const { title, explanation, date, url, media_type, copyright } = req.body;
 
+    // Validar que todos los campos obligatorios estén presentes
+    if (!title || !explanation || !date || !url || !media_type) {
+        return res.status(400).json({ 
+            message: 'Faltan campos obligatorios. Asegúrate de incluir: title, explanation, date, url y media_type.' 
+        });
+    }
+
     // Validar el formato de la fecha
-    if (!date || !isValidDate(date)) {
+    if (!isValidDate(date)) {
         return res.status(400).json({ message: 'Formato de fecha inválido. Use YYYY-MM-DD.' });
     }
 
     try {
-        // Verifica si ya existe un APOD con la misma fecha
-        const existingAPOD = await APOD.findOne({ date });
-        if (existingAPOD) {
-            return res.status(400).json({ message: 'Ya existe un APOD con esa fecha' });
+        // Crear un nuevo documento APOD (sin verificar si ya existe uno con la misma fecha)
+        // Crear un nuevo documento APOD
+        const newAPOD = new APOD({
+            date,
+            title,
+            explanation,
+            url,
+            media_type,
+            copyright: copyright || '', // Si no se proporciona copyright, se guarda como cadena vacía
+        });
+
+        // Guardar el APOD en la base de datos
+        await newAPOD.save();
+
+        // Responder con el APOD creado
+        res.status(201).json({
+            message: 'APOD guardado exitosamente',
+            apod: newAPOD,
+        });
+    } catch (error) {
+        console.error('Error al guardar el APOD:', error);
+
+        // Manejar errores de validación de Mongoose
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ 
+                message: 'Error de validación',
+                details: error.message,
+            });
         }
 
-        // Crea un nuevo APOD y lo guarda en la base de datos
-        const newAPOD = new APOD({ title, explanation, date, url, media_type, copyright });
-        await newAPOD.save();
-        res.status(201).json(newAPOD);
-    } catch (error) {
-        res.status(400).json({ message: 'Error al guardar el APOD en la base de datos' });
+
+        // Error genérico del servidor
+        res.status(500).json({ 
+            message: 'Error al guardar el APOD en el servidor.',
+            error: error.message,
+        });
     }
 };
-
 // Actualizar un APOD
 const updateAPOD = async (req, res) => {
     const { date } = req.query;

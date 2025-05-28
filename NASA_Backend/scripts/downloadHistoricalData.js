@@ -40,6 +40,6 @@ const downloadHistoricalData = async (startDate, endDate) => {
 };
 
 // Ejecutar la funcion con un rango de fechas
-const startDate = '2025-02-10';
-const endDate = '2025-02-20';
+const startDate = '2025-04-01';
+const endDate = '2025-04-10';
 downloadHistoricalData(startDate, endDate);
